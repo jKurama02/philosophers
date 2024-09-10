@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/09 19:07:48 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/10 21:35:21 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_data
 	int				philo_num;
 	int				dead;
 	int				finished;
+	int				meals_number;
 	t_philo			*philos;
 	u_int64_t		death_time;
 	u_int64_t		eat_time;

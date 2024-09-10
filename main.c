@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/10 19:50:00 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/10 22:45:02 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int init_input1(t_data *data, int argc, char **argv)
 	data->death_time = (uint64_t) ft_atoi(argv[2]);
 	data->eat_time = (uint64_t) ft_atoi(argv[3]);
 	data->sleep_time = (uint64_t) ft_atoi(argv[4]);
+	if(argc == 6)
+		data->meals_number = ft_atoi(argv[5]);
 	if(data->philo_num <= 0 || data->death_time < 0
 		|| data->eat_time < 0 || data->sleep_time < 0
 		|| data->philo_num > 200)
@@ -100,6 +102,7 @@ int init_input2(t_data *data)
 	}
 	return (0);
 }
+
 int init_philo(t_data *data)
 {
 	int i;
@@ -107,12 +110,19 @@ int init_philo(t_data *data)
 	i = -1;
 	while(++i < data->philo_num)
 	{
-		data->philos[i].id = i;
+		data->philos[i].id = i + 1;
 		data->philos[i].data = data;
 		data->philos[i].eat_cont = 0;
 		data->philos[i].status = 0;
 		data->philos[i].eating = 0;
+		data->philos[i].time_to_die = data->death_time;
+		pthread_mutex_init(&data->philos[i].lock, NULL);
 	}
+	return 0;
+}
+int routine(t_data *data)
+{
+			//3.4 guida Nikoter 
 }
 int main(int argc, char **argv)
 {
@@ -126,11 +136,7 @@ int main(int argc, char **argv)
 			err_exit("Error init 1/ 2 <3");
 		if (init_philo(&data))
 			err_exit("Error philo <3");
-		else
-		{
-		printf("%p\n", &data.forks[0]);
-			printf("codio\n");
-		}
+		if(routine(&data));
 		return 0;
 	}
 	else
