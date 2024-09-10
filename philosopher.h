@@ -1,5 +1,17 @@
-#ifndef PHILOSOPHER.H
-# define PILOSOPHER.H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosopher.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
+/*   Updated: 2024/09/09 19:07:48 by anmedyns         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -26,7 +38,6 @@ typedef struct s_data
 {
 	pthread_t		*tid;
 	int				philo_num;
-	int				meals_nb;
 	int				dead;
 	int				finished;
 	t_philo			*philos;
