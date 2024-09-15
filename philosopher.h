@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/10 21:35:21 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/15 19:47:46 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@
 # include <limits.h>
 # include <stdio.h>
 # include <stdint.h>
-
+#include <sys/time.h>
+#include <pthread.h>
 
 typedef struct s_philo
 {
 	struct s_data	*data;
-	pthread_t		t1;
+	pthread_t		t;
 	int				id;
 	int				eat_cont;
 	int				status;
@@ -51,6 +52,7 @@ typedef struct s_data
 	pthread_mutex_t	write;
 }	t_data;
 
+int visula_checker(t_philo *philosofo);
 
 #endif
 

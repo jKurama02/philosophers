@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/10 22:45:02 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/15 21:07:03 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int init_input1(t_data *data, int argc, char **argv)
 		data->meals_number = ft_atoi(argv[5]);
 	if(data->philo_num <= 0 || data->death_time < 0
 		|| data->eat_time < 0 || data->sleep_time < 0
-		|| data->philo_num > 200)
+		|| data->philo_num > 200 || data->meals_number >= 200)
 		return (1);
 	data->finished = 0;
 	data->dead = 0;
@@ -120,10 +120,54 @@ int init_philo(t_data *data)
 	}
 	return 0;
 }
-int routine(t_data *data)
+
+uint64_t ft_time(void)
 {
-			//3.4 guida Nikoter 
+	struct timeval time;
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
+void *routine(void *philos)  //void * ----indica un puntatore generico
+{
+	t_philo *philo;
+
+	philo = philos;
+	philo->time_to_die = philo->time_to_die + ft_time();
+	printf("ciao sono il thread n%i\n", philo->id);
+
+	// pthread_create(&philo->t, NULL, &visula_checker, (void *)philo);
+	// pthread_join(philo->t, NULL);
+	pthread_mutex_lock(&philo->data->lock);
+	pthread_mutex_lock(&philo->data->write);
+	pthread_mutex_lock(philo->r_fork);
+	pthread_mutex_lock(philo->l_fork);
+	printf("Take forks at : %li\n", ft_time());
+	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(&philo->data->write);
+	pthread_mutex_unlock(&philo->data->lock);
+}
+
+int init_thread(t_data *data)
+{
+	int i;
+
+	i = -1;
+	data->start_time = ft_time();
+	while(++i < data->philo_num)
+	{
+		pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]);
+		usleep(1000000);
+	}
+	i = -1;
+	while(++i < data->philo_num)
+	{
+		pthread_join(data->tid[i], NULL);
+		usleep (1000000);
+	}
+	return (0);
+}
+
 int main(int argc, char **argv)
 {
 	t_data data;
@@ -136,9 +180,9 @@ int main(int argc, char **argv)
 			err_exit("Error init 1/ 2 <3");
 		if (init_philo(&data))
 			err_exit("Error philo <3");
-		if(routine(&data));
-		return 0;
+		if(init_thread(&data))
+			err_exit("Error init_thread <3");
+		else
+			err_exit("Error number argument <3");
 	}
-	else
-		err_exit("Error number argument <3");
 }
