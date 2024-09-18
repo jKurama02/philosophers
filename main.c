@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/18 21:43:02 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/18 23:06:59 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ void *take_fork_eat(void *philos)
 	printf("is take forks : %li\n", ft_time() - philo->data->start_time);
 	printf("is eating: %li\n", ft_time() - philo->data->start_time);
 	philo->eating = 1;
+	philo->eat_cont++;
 	philo->time_to_die = ft_time() + philo->time_to_die;
 	usleep(philo->data->eat_time * 1000);
 
@@ -188,22 +189,29 @@ void *routine(void *philos)  //void * ----indica un puntatore generico
 	t_philo *philo;
 
 	philo = philos;
+//	printf("N ARG = %i", philo->data->argument);
 	if(philo->data->argument == 6)
 	{
-		while (philo->eat_cont <= philo->data->meals_number)
+		while (philo->eat_cont < philo->data->meals_number)
 		{
 			think(philos);
 			take_fork_eat(philos);
+
+			printf("MEAL_count = %i/%i\n", philo->eat_cont, philo->data->meals_number);
 			ft_sleep(philos);
 			printf("______________________\n");
 		}
 	}
-	else(philo->data->argument == 5);
+
+	else if(philo->data->argument == 5);
 	{
 		while (1)
 		{
+			printf("N ARG = %i", philo->data->argument);
+
 			think(philos);
 			take_fork_eat(philos);
+			printf("MEAL_count = %i\n", philo->eat_cont);
 			ft_sleep(philos);
 			printf("______________________\n");
 		}
@@ -220,8 +228,8 @@ int init_thread(t_data *data)
 	k = -1;
 	i = -1;
 	data->start_time = ft_time();
-	if (data->philos->id % 2 == 0)
-		usleep(500);
+//	if (data->philos->id % 2 == 0)
+//		usleep(500);
 
 	while(++i < data->philo_num)
 	{
@@ -242,9 +250,9 @@ int main(int argc, char **argv)
 	t_data data;
 
 	if (argc == 6)
-		data.argument = 1;
+		data.argument = 6;
 	if(argc == 5)
-		data.argument = 0;
+		data.argument = 5;
 
 	if(argc == 5 || argc == 6)
 	{
