@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/15 21:07:03 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:43:02 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,43 +127,112 @@ uint64_t ft_time(void)
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
+
+void my_usleep(uint64_t microseconds)
+{
+	useconds_t usec = (useconds_t)microseconds;
+	usleep(usec);
+}
+
+void *ft_sleep(void *philos)
+{
+	t_philo *philo;
+
+	philo = philos;
+	pthread_mutex_lock(&philo->data->write);
+	printf("is sleeping : %li\n", ft_time() - philo->data->start_time);
+	pthread_mutex_unlock(&philo->data->write);
+}
+
+void *think(void *philos)
+{
+	t_philo *philo;
+
+	philo = philos;
+
+	pthread_mutex_lock(&philo->data->write);
+	printf("PHILOSOFO :%i\n", philo->id);
+	printf("thinking : %li\n", ft_time() - philo->data->start_time);
+	pthread_mutex_unlock(&philo->data->write);
+}
+
+void *take_fork_eat(void *philos)
+{
+		t_philo *philo;
+
+	philo = philos;
+	philo->time_to_die = philo->time_to_die + ft_time();
+
+	pthread_mutex_lock(&philo->data->write);
+	pthread_mutex_lock(&philo->data->lock);
+	pthread_mutex_lock(&philo->lock);
+	pthread_mutex_lock(philo->l_fork);
+	pthread_mutex_lock(philo->r_fork);
+	printf("is take forks : %li\n", ft_time() - philo->data->start_time);
+	printf("is eating: %li\n", ft_time() - philo->data->start_time);
+	philo->eating = 1;
+	philo->time_to_die = ft_time() + philo->time_to_die;
+	usleep(philo->data->eat_time * 1000);
+
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+	printf("is drop forks : %li\n", ft_time() - philo->data->start_time);
+	pthread_mutex_unlock(&philo->data->write);
+	pthread_mutex_unlock(&philo->data->lock);
+	pthread_mutex_unlock(&philo->lock);
+}
+
+
 void *routine(void *philos)  //void * ----indica un puntatore generico
 {
 	t_philo *philo;
 
 	philo = philos;
-	philo->time_to_die = philo->time_to_die + ft_time();
-	printf("ciao sono il thread n%i\n", philo->id);
+	if(philo->data->argument == 6)
+	{
+		while (philo->eat_cont <= philo->data->meals_number)
+		{
+			think(philos);
+			take_fork_eat(philos);
+			ft_sleep(philos);
+			printf("______________________\n");
+		}
+	}
+	else(philo->data->argument == 5);
+	{
+		while (1)
+		{
+			think(philos);
+			take_fork_eat(philos);
+			ft_sleep(philos);
+			printf("______________________\n");
+		}
+	}
 
-	// pthread_create(&philo->t, NULL, &visula_checker, (void *)philo);
-	// pthread_join(philo->t, NULL);
-	pthread_mutex_lock(&philo->data->lock);
-	pthread_mutex_lock(&philo->data->write);
-	pthread_mutex_lock(philo->r_fork);
-	pthread_mutex_lock(philo->l_fork);
-	printf("Take forks at : %li\n", ft_time());
-	pthread_mutex_unlock(philo->r_fork);
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(&philo->data->write);
-	pthread_mutex_unlock(&philo->data->lock);
+
 }
 
 int init_thread(t_data *data)
 {
 	int i;
+	int k;
 
+	k = -1;
 	i = -1;
 	data->start_time = ft_time();
+	if (data->philos->id % 2 == 0)
+		usleep(500);
+
 	while(++i < data->philo_num)
 	{
-		pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]);
-		usleep(1000000);
+		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
+			printf("dio\n");
 	}
-	i = -1;
-	while(++i < data->philo_num)
+	while(++k < data->philo_num)
 	{
-		pthread_join(data->tid[i], NULL);
-		usleep (1000000);
+		if(pthread_join(data->tid[k], NULL))
+			printf(" dio\n");
+		usleep (500000);
 	}
 	return (0);
 }
@@ -171,6 +240,11 @@ int init_thread(t_data *data)
 int main(int argc, char **argv)
 {
 	t_data data;
+
+	if (argc == 6)
+		data.argument = 1;
+	if(argc == 5)
+		data.argument = 0;
 
 	if(argc == 5 || argc == 6)
 	{
@@ -186,3 +260,8 @@ int main(int argc, char **argv)
 			err_exit("Error number argument <3");
 	}
 }
+
+//Domande a Lollo
+// gli elementi della struttura data che e' una sottostruttura di philo , gli elementi sono condivisi con tutti i filosofi sumultaneamente ?
+// problemi con numero di filosofi PARI
+//

@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/15 19:47:46 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/18 21:09:58 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdint.h>
 #include <sys/time.h>
 #include <pthread.h>
+#include <time.h>
+
 
 typedef struct s_philo
 {
@@ -38,6 +40,7 @@ typedef struct s_philo
 typedef struct s_data
 {
 	pthread_t		*tid;
+	int				argument;
 	int				philo_num;
 	int				dead;
 	int				finished;
@@ -52,7 +55,7 @@ typedef struct s_data
 	pthread_mutex_t	write;
 }	t_data;
 
-int visula_checker(t_philo *philosofo);
+//int visula_checker(t_philo *philosofo);
 
 #endif
 
