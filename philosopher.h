@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/18 21:09:58 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:37:34 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@
 typedef struct s_philo
 {
 	struct s_data	*data;
-	pthread_t		t;
 	int				id;
 	int				eat_cont;
 	int				status;
+	pthread_t		t;
 	int				eating;
+	uint64_t		last_meal;
 	uint64_t		time_to_die;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*r_fork;

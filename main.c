@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/18 23:06:59 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:52:07 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,56 +168,83 @@ void *take_fork_eat(void *philos)
 	pthread_mutex_lock(&philo->lock);
 	pthread_mutex_lock(philo->l_fork);
 	pthread_mutex_lock(philo->r_fork);
+
 	printf("is take forks : %li\n", ft_time() - philo->data->start_time);
 	printf("is eating: %li\n", ft_time() - philo->data->start_time);
-	philo->eating = 1;
 	philo->eat_cont++;
-	philo->time_to_die = ft_time() + philo->time_to_die;
+	if(philo->data->dead == 1)
+		exit;
+	philo->eating = 1;
 	usleep(philo->data->eat_time * 1000);
+	philo->last_meal = ft_time();
+	philo->time_to_die = ft_time() + philo->time_to_die;
 
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
+	philo->eating = 0;
 	printf("is drop forks : %li\n", ft_time() - philo->data->start_time);
 	pthread_mutex_unlock(&philo->data->write);
 	pthread_mutex_unlock(&philo->data->lock);
 	pthread_mutex_unlock(&philo->lock);
 }
 
-
-void *routine(void *philos)  //void * ----indica un puntatore generico
+void *monitor(void *philos)
 {
 	t_philo *philo;
 
 	philo = philos;
-//	printf("N ARG = %i", philo->data->argument);
+	int i = -1;
+	while((philo->data->dead != 1))
+	{
+		pthread_mutex_lock(&philo->lock);
+		if((ft_time() >= philo->time_to_die) && philo->eating != 0)
+		{
+			pthread_mutex_lock(&philo->data->lock);
+			pthread_mutex_lock(&philo->data->write);
+			printf("%lu %u is died\n", ft_time() - philo->data->start_time, philo->id);
+			philo->data->dead = 1;
+			usleep(1000);
+			pthread_mutex_unlock(&philo->data->write);
+			pthread_mutex_unlock(&philo->data->lock);
+			break;
+		}
+				pthread_mutex_unlock(&philo->lock);
+	}
+}
+
+void *routine(void *philos)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)philos;
+
+
 	if(philo->data->argument == 6)
 	{
-		while (philo->eat_cont < philo->data->meals_number)
+		if(pthread_create(&philo->t, NULL, &monitor, &philo));
+			printf("diko\n");
+		while ((philo->eat_cont < philo->data->meals_number) && philo->data->dead)
 		{
 			think(philos);
 			take_fork_eat(philos);
 
 			printf("MEAL_count = %i/%i\n", philo->eat_cont, philo->data->meals_number);
 			ft_sleep(philos);
-			printf("______________________\n");
+			printf("_________________________\n\n");
 		}
 	}
 
-	else if(philo->data->argument == 5);
+	else if(philo->data->argument == 5)
 	{
-		while (1)
+		while (philo->data->dead != 1)
 		{
-			printf("N ARG = %i", philo->data->argument);
-
 			think(philos);
 			take_fork_eat(philos);
 			printf("MEAL_count = %i\n", philo->eat_cont);
 			ft_sleep(philos);
-			printf("______________________\n");
+			printf("___________________________\n\n");
 		}
 	}
-
-
 }
 
 int init_thread(t_data *data)
@@ -228,14 +255,15 @@ int init_thread(t_data *data)
 	k = -1;
 	i = -1;
 	data->start_time = ft_time();
-//	if (data->philos->id % 2 == 0)
-//		usleep(500);
 
 	while(++i < data->philo_num)
 	{
+		if (data->philos->id % 2 == 0)
+			usleep(500);
 		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			printf("dio\n");
 	}
+
 	while(++k < data->philo_num)
 	{
 		if(pthread_join(data->tid[k], NULL))
@@ -268,8 +296,3 @@ int main(int argc, char **argv)
 			err_exit("Error number argument <3");
 	}
 }
-
-//Domande a Lollo
-// gli elementi della struttura data che e' una sottostruttura di philo , gli elementi sono condivisi con tutti i filosofi sumultaneamente ?
-// problemi con numero di filosofi PARI
-//
