@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/30 13:37:34 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:19:52 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,11 @@
 typedef struct s_philo
 {
 	struct s_data	*data;
+	pthread_t		t;
 	int				id;
 	int				eat_cont;
 	int				status;
-	pthread_t		t;
 	int				eating;
-	uint64_t		last_meal;
 	uint64_t		time_to_die;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*r_fork;
@@ -56,7 +55,20 @@ typedef struct s_data
 	pthread_mutex_t	write;
 }	t_data;
 
-//int visula_checker(t_philo *philosofo);
+int			ft_atoi(char *str);
+void		err_exit(char *err);
+int			check_input(char **argv);
+int			init_thread(t_data *data);
+int			init_input1(t_data *data, int argc, char **argv);
+int			init_input2(t_data *data);
+uint64_t	ft_time(void);
+int			init_philo(t_data *data);
+void		*routine(void *philos);
+
+
+
+
+
 
 #endif
 
