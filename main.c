@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/09/30 13:52:07 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:42:09 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,12 @@ int init_input2(t_data *data)
 	}
 	return (0);
 }
+uint64_t ft_time(void)
+{
+	struct timeval time;
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
 
 int init_philo(t_data *data)
 {
@@ -115,18 +121,12 @@ int init_philo(t_data *data)
 		data->philos[i].eat_cont = 0;
 		data->philos[i].status = 0;
 		data->philos[i].eating = 0;
-		data->philos[i].time_to_die = data->death_time;
+		data->philos[i].time_to_die = ft_time() + data->death_time;
 		pthread_mutex_init(&data->philos[i].lock, NULL);
 	}
 	return 0;
 }
 
-uint64_t ft_time(void)
-{
-	struct timeval time;
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
 
 void my_usleep(uint64_t microseconds)
 {
@@ -142,6 +142,7 @@ void *ft_sleep(void *philos)
 	pthread_mutex_lock(&philo->data->write);
 	printf("is sleeping : %li\n", ft_time() - philo->data->start_time);
 	pthread_mutex_unlock(&philo->data->write);
+	usleep(philo->data->sleep_time);
 }
 
 void *think(void *philos)
@@ -151,7 +152,7 @@ void *think(void *philos)
 	philo = philos;
 
 	pthread_mutex_lock(&philo->data->write);
-	printf("PHILOSOFO :%i\n", philo->id);
+	printf("$$PHILOSOFO$$ :%i\n", philo->id);
 	printf("thinking : %li\n", ft_time() - philo->data->start_time);
 	pthread_mutex_unlock(&philo->data->write);
 }
@@ -176,8 +177,9 @@ void *take_fork_eat(void *philos)
 		exit;
 	philo->eating = 1;
 	usleep(philo->data->eat_time * 1000);
-	philo->last_meal = ft_time();
-	philo->time_to_die = ft_time() + philo->time_to_die;
+	philo->last_meal = ft_time() - philo->data->start_time;
+	philo->time_to_die = philo->last_meal + philo->time_to_die;
+	printf("time_to_die : %li\n", philo->time_to_die);
 
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
@@ -194,14 +196,15 @@ void *monitor(void *philos)
 
 	philo = philos;
 	int i = -1;
-	while((philo->data->dead != 1))
+	while(1)
 	{
+			//printf("time_to_die : %li\n", philo->time_to_die);
 		pthread_mutex_lock(&philo->lock);
-		if((ft_time() >= philo->time_to_die) && philo->eating != 0)
+		if(((ft_time() - philo->last_meal) >= philo->time_to_die) && philo->eating != 0)
 		{
 			pthread_mutex_lock(&philo->data->lock);
 			pthread_mutex_lock(&philo->data->write);
-			printf("%lu %u is died\n", ft_time() - philo->data->start_time, philo->id);
+			printf("%lu %u !!!!!!!!!is died\n", ft_time() - philo->data->start_time, philo->id);
 			philo->data->dead = 1;
 			usleep(1000);
 			pthread_mutex_unlock(&philo->data->write);
@@ -222,12 +225,11 @@ void *routine(void *philos)
 	if(philo->data->argument == 6)
 	{
 		if(pthread_create(&philo->t, NULL, &monitor, &philo));
-			printf("diko\n");
-		while ((philo->eat_cont < philo->data->meals_number) && philo->data->dead)
+
+		while ((philo->eat_cont < philo->data->meals_number) && !philo->data->dead)
 		{
 			think(philos);
 			take_fork_eat(philos);
-
 			printf("MEAL_count = %i/%i\n", philo->eat_cont, philo->data->meals_number);
 			ft_sleep(philos);
 			printf("_________________________\n\n");
@@ -255,10 +257,10 @@ int init_thread(t_data *data)
 	k = -1;
 	i = -1;
 	data->start_time = ft_time();
-
+;
 	while(++i < data->philo_num)
 	{
-		if (data->philos->id % 2 == 0)
+		if ((data->philos[i].id % 2) == 0)
 			usleep(500);
 		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			printf("dio\n");
@@ -268,7 +270,6 @@ int init_thread(t_data *data)
 	{
 		if(pthread_join(data->tid[k], NULL))
 			printf(" dio\n");
-		usleep (500000);
 	}
 	return (0);
 }
