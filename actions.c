@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 14:14:00 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/05 13:41:21 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:33:56 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void *take_fork(void *singlephilo)
 	//pthread_mutex_lock(&philo->data->lock);
 	//pthread_mutex_lock(&philo->lock);
 	pthread_mutex_lock(philo->l_fork);
-	printa_cose(philo, "has taken a fork");
+	printa_cose(philo, "has taken a fork l");
 	pthread_mutex_lock(philo->r_fork);
-	printa_cose(philo, "has taken a fork");
+	printa_cose(philo, "has taken a fork r");
 	printa_cose(philo, "is eating");
 	philo->eating = 1;
 	philo->time_to_die = philo->time_to_die + ft_time();
