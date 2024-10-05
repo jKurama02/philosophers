@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/05 15:50:56 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:12:03 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void *routine(void *philos)
 
 	if(philo->data->argument == 6)
 	{
-		while (1)
+		while (philo->eat_cont < philo->data->meals_number)
 		{
 			think(philos);
 			take_fork(philos);
