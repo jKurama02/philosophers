@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/01 15:12:15 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:25:39 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,20 @@ void *routine(void *philos)
 
 	if(philo->data->argument == 6)
 	{
-		while (0)
+		while (1)
 		{
-			//think(philos);
-			//take_fork_eat(philos);
-			//printf("MEAL_count = %i/%i\n", philo->eat_cont, philo->data->meals_number);
-			printf("_________________________\n\n");
+			think(philos);
+			take_fork(philos);
+			my_usleep(philo->data->sleep_time);
 		}
 	}
 	else if(philo->data->argument == 5)
 	{
-		while (0)
+		while (1)
 		{
-			//think(philos);
-			//take_fork_eat(philos);
-			//printf("MEAL_count = %i\n", philo->eat_cont);
-			printf("___________________________\n\n");
+			think(philos);
+			take_fork(philo);
+			my_usleep(philo->data->sleep_time);
 		}
 	}
 }

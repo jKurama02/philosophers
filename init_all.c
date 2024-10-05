@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:01 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/01 15:02:55 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/05 13:53:32 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ int init_thread(t_data *data)
 	k = -1;
 	i = -1;
 	data->start_time = ft_time();
-;
+
 	while(++i < data->philo_num)
 	{
-		if ((data->philos[i].id % 2) == 0)
-			usleep(500);
+		if((data->philos[i].id % 2) == 0)
+			my_usleep(1);
 		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			printf("dio\n");
+		my_usleep(1);
 	}
 
 	while(++k < data->philo_num)
@@ -94,6 +95,7 @@ int init_philo(t_data *data)
 		data->philos[i].eat_cont = 0;
 		data->philos[i].status = 0;
 		data->philos[i].eating = 0;
+		data->philos[i].last_meal = ft_time();
 		data->philos[i].time_to_die = ft_time() + data->death_time;
 		pthread_mutex_init(&data->philos[i].lock, NULL);
 	}

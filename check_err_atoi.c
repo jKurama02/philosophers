@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:05:24 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/01 14:10:30 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/04 14:18:54 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,14 @@ int	check_input(char **argv)
 		}
 	}
 	return (0);
+}
+
+int	my_usleep(useconds_t time)
+{
+	u_int64_t	start;
+	start = ft_time();
+	while ((ft_time() - start) < time)
+		usleep(time / 10);
+	return(0);
 }
 
