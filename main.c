@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/04 15:25:39 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:50:56 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,3 @@ int main(int argc, char **argv)
 
 }
 
-//		printf("death_time :%li\n", data.death_time);
-//		printf("eat_time :%li\n", data.eat_time);
-//		printf("sleep_time :%li\n", data.sleep_time);
-//		printf("start_time : %li\n", data.start_time);

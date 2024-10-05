@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:01 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/05 13:53:32 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:11:03 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int init_input2(t_data *data)
 	i = 0;
 	while(++i < data->philo_num)
 	{
-		data->philos[i].r_fork = &data->forks[data->philo_num - i];
+		data->philos[i].r_fork = &data->forks[i - 1]; // co dio
 		data->philos[i].l_fork = &data->forks[i];
 	}
 	return (0);
