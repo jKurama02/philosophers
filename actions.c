@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 14:14:00 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/05 18:05:05 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/06 17:26:07 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 void printa_cose(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->data->write);
+	if(philo->data->dead == 1)
+	{
+		printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, "died");
+		pthread_mutex_unlock(&philo->data->write);
+		pthread_exit((void *)0);
+	}
 	printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, str);
 	pthread_mutex_unlock(&philo->data->write);
 }
@@ -36,12 +42,12 @@ void *take_fork(void *singlephilo)
 	pthread_mutex_lock(&philo->data->lock);
 	pthread_mutex_lock(&philo->lock);
 	pthread_mutex_lock(philo->l_fork);
-	printa_cose(philo, "has taken a fork l");
+	printa_cose(philo, "has taken a fork");
 	pthread_mutex_lock(philo->r_fork);
-	printa_cose(philo, "has taken a fork r");
-	printa_cose(philo, "is eating");
+	printa_cose(philo, "has taken a fork");
 	philo->eating = 1;
-	philo->time_to_die = philo->time_to_die + ft_time();
+	printa_cose(philo, "is eating");
+	philo->time_to_die = philo->data->death_time + ft_time();
 	my_usleep(philo->data->eat_time);
 	philo->last_meal = ft_time() - philo->data->start_time;
 	philo->eating = 0;

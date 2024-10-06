@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/06 13:08:53 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/06 17:27:14 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,25 @@
 void *miller(void *philos)
 {
 	t_philo *philo;
-
 	philo = philos;
-	int i = 0;
+
 	while(philo->data->dead != 1)
 	{
-		if(philo->data->finished == philo->data->philo_num)
+		pthread_mutex_lock(&philo->lock);
+		pthread_mutex_lock(&philo->data->lock);
+		if((ft_time() >= philo->time_to_die ) && philo->eating != 1)
 		{
-			pthread_mutex_lock(&philo->data->lock);
+			philo->data->dead = 1;
+			pthread_mutex_unlock(&philo->lock);
+			pthread_mutex_unlock(&philo->data->lock);
 		}
+		if(philo->eat_cont == philo->data->philo_num)
+		{
+			philo->data->finished++;
+
+		}
+		pthread_mutex_unlock(&philo->lock);
+		pthread_mutex_unlock(&philo->data->lock);
 	}
 }
 
@@ -35,9 +45,11 @@ void *routine(void *philos)
 	philo = (t_philo *)philos;
 
 
+	if(pthread_create(&philo->s, NULL, &miller, (void *)philo))
+			printf("poverodio\n");
 	if(philo->data->argument == 6)
 	{
-		while ((philo->eat_cont <= philo->data->meals_number) && (philo->data->dead == 0))
+		while((philo->eat_cont <= philo->data->meals_number) && (philo->data->dead == 0))
 		{
 			think(philos);
 			take_fork(philos);
@@ -53,9 +65,10 @@ void *routine(void *philos)
 			my_usleep(philo->data->sleep_time);
 		}
 	}
+	pthread_join(philo->s, NULL);
 }
 
-
+// ipotesi = ogni volta che chiamo printa_cose , dentro checko' se dead != 0
 int main(int argc, char **argv)
 {
 	t_data data;
