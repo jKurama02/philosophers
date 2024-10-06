@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 14:14:00 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/05 14:33:56 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/05 18:05:05 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void *take_fork(void *singlephilo)
 
 	philo = singlephilo;
 
-	//pthread_mutex_lock(&philo->data->lock);
-	//pthread_mutex_lock(&philo->lock);
+	pthread_mutex_lock(&philo->data->lock);
+	pthread_mutex_lock(&philo->lock);
 	pthread_mutex_lock(philo->l_fork);
 	printa_cose(philo, "has taken a fork l");
 	pthread_mutex_lock(philo->r_fork);
@@ -52,5 +52,7 @@ void *take_fork(void *singlephilo)
 	pthread_mutex_unlock(philo->r_fork);
 	printa_cose(philo, "is sleeping");
 	my_usleep(philo->data->sleep_time);
+	pthread_mutex_unlock(&philo->data->lock);
+	pthread_mutex_unlock(&philo->lock);
 }
 

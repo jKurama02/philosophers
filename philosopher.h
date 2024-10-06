@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/05 15:49:56 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/06 13:08:18 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 typedef struct s_philo
 {
 	struct s_data	*data;
-	pthread_t		t;
+	pthread_t		s;
+	pthread_t		m;
 	int				id;
 	int				eat_cont;
 	int				status;
@@ -69,6 +70,7 @@ int			my_usleep(useconds_t time);
 void		*take_fork(void *singlephilo);
 void		*think(void *singlephilo);
 void		printa_cose(t_philo *philo, char *str);
+void		*miller(void *philos);
 
 
 #endif

@@ -6,11 +6,27 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/05 16:12:03 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/06 13:08:53 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
+
+void *miller(void *philos)
+{
+	t_philo *philo;
+
+	philo = philos;
+	int i = 0;
+	while(philo->data->dead != 1)
+	{
+		if(philo->data->finished == philo->data->philo_num)
+		{
+			pthread_mutex_lock(&philo->data->lock);
+		}
+	}
+}
+
 
 void *routine(void *philos)
 {
@@ -21,7 +37,7 @@ void *routine(void *philos)
 
 	if(philo->data->argument == 6)
 	{
-		while (philo->eat_cont < philo->data->meals_number)
+		while ((philo->eat_cont <= philo->data->meals_number) && (philo->data->dead == 0))
 		{
 			think(philos);
 			take_fork(philos);
@@ -30,7 +46,7 @@ void *routine(void *philos)
 	}
 	else if(philo->data->argument == 5)
 	{
-		while (1)
+		while (philo->data->dead == 0)
 		{
 			think(philos);
 			take_fork(philo);
