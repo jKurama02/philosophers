@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/06 17:27:14 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:45:10 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,17 @@ void *miller(void *philos)
 
 	while(philo->data->dead != 1)
 	{
-		pthread_mutex_lock(&philo->lock);
-		pthread_mutex_lock(&philo->data->lock);
-		if((ft_time() >= philo->time_to_die ) && philo->eating != 1)
+		if((ft_time() > philo->time_to_die) && philo-> eating != 1)
 		{
+			pthread_mutex_lock(&philo->data->lock);
 			philo->data->dead = 1;
-			pthread_mutex_unlock(&philo->lock);
 			pthread_mutex_unlock(&philo->data->lock);
+			break;
 		}
-		if(philo->eat_cont == philo->data->philo_num)
-		{
-			philo->data->finished++;
-
-		}
-		pthread_mutex_unlock(&philo->lock);
-		pthread_mutex_unlock(&philo->data->lock);
 	}
+	pthread_mutex_lock(&philo->data->write);
+	printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, "died");
+	pthread_mutex_unlock(&philo->data->write);
 }
 
 
@@ -51,8 +46,8 @@ void *routine(void *philos)
 	{
 		while((philo->eat_cont <= philo->data->meals_number) && (philo->data->dead == 0))
 		{
-			think(philos);
-			take_fork(philos);
+			think(philo);
+			take_fork(philo);
 			my_usleep(philo->data->sleep_time);
 		}
 	}
@@ -60,7 +55,7 @@ void *routine(void *philos)
 	{
 		while (philo->data->dead == 0)
 		{
-			think(philos);
+			think(philo);
 			take_fork(philo);
 			my_usleep(philo->data->sleep_time);
 		}
@@ -94,3 +89,19 @@ int main(int argc, char **argv)
 
 }
 
+	// 	//pthread_mutex_lock(&philo->lock);
+	// 	pthread_mutex_lock(&philo->data->lock);
+	// 	if((ft_time() >= philo->time_to_die ) && philo->eating != 1)
+	// 	{
+	// 		philo->data->dead = 1;
+	// 		//pthread_mutex_unlock(&philo->lock);
+	// 		pthread_mutex_unlock(&philo->data->lock);
+	// 	}
+	// 	if(philo->eat_cont == philo->data->meals_number)
+	// 	{
+	// 		philo->data->finished++;
+	// 		//pthread_mutex_unlock(&philo->lock);
+	// 		pthread_mutex_unlock(&philo->data->lock);
+	// 	}
+	// //	pthread_mutex_unlock(&philo->lock);
+	// 	pthread_mutex_unlock(&philo->data->lock);

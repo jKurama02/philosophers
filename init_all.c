@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:01 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/06 15:09:37 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:26:44 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ int init_thread(t_data *data)
 	k = -1;
 	i = -1;
 	data->start_time = ft_time();
-	// if(data->meals_number > 0)
-	// {
-	// 	if(pthread_create(&data->philos[0].m, NULL, &miller, &data->philos[0]))
-	// 		printf("dio\n");
-	// }
+	//if(data->meals_number > 0)
+	//{
+	//	if(pthread_create(&data->philos[0].m, NULL, &miller, &data->philos[0]))
+	//		printf("dio\n");
+	//}
 	while(++i < data->philo_num)
 	{
-		if((data->philos[i].id % 2) == 0)
-			my_usleep(1);
+		//if((data->philos[i].id % 2) == 1)
+		//	my_usleep(1);
 		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			printf("dio\n");
 		my_usleep(1);
