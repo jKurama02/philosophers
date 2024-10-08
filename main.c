@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/07 16:45:10 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:45:20 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void *miller(void *philos)
 	}
 	pthread_mutex_lock(&philo->data->write);
 	printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, "died");
-	pthread_mutex_unlock(&philo->data->write);
 }
 
 
@@ -39,7 +38,6 @@ void *routine(void *philos)
 
 	philo = (t_philo *)philos;
 
-
 	if(pthread_create(&philo->s, NULL, &miller, (void *)philo))
 			printf("poverodio\n");
 	if(philo->data->argument == 6)
@@ -48,7 +46,6 @@ void *routine(void *philos)
 		{
 			think(philo);
 			take_fork(philo);
-			my_usleep(philo->data->sleep_time);
 		}
 	}
 	else if(philo->data->argument == 5)
@@ -57,13 +54,11 @@ void *routine(void *philos)
 		{
 			think(philo);
 			take_fork(philo);
-			my_usleep(philo->data->sleep_time);
 		}
 	}
 	pthread_join(philo->s, NULL);
 }
 
-// ipotesi = ogni volta che chiamo printa_cose , dentro checko' se dead != 0
 int main(int argc, char **argv)
 {
 	t_data data;
@@ -83,25 +78,22 @@ int main(int argc, char **argv)
 			err_exit("Error philo <3");
 		if(init_thread(&data))
 			err_exit("Error init_thread <3");
+		at_home(&data);
+		return (0);
 	}
-		else
-			err_exit("Error number argument <3");
-
 }
 
-	// 	//pthread_mutex_lock(&philo->lock);
-	// 	pthread_mutex_lock(&philo->data->lock);
-	// 	if((ft_time() >= philo->time_to_die ) && philo->eating != 1)
-	// 	{
-	// 		philo->data->dead = 1;
-	// 		//pthread_mutex_unlock(&philo->lock);
-	// 		pthread_mutex_unlock(&philo->data->lock);
-	// 	}
-	// 	if(philo->eat_cont == philo->data->meals_number)
-	// 	{
-	// 		philo->data->finished++;
-	// 		//pthread_mutex_unlock(&philo->lock);
-	// 		pthread_mutex_unlock(&philo->data->lock);
-	// 	}
-	// //	pthread_mutex_unlock(&philo->lock);
-	// 	pthread_mutex_unlock(&philo->data->lock);
+int at_come(t_data *data)
+{
+	while(
+		
+	)
+}
+/*
+	sistemare :
+
+		input 1 filosofo = morte diretta;
+		se mangiano quanto devono , finire il programma senza farli morire
+
+
+*/

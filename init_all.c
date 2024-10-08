@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:01 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/07 16:26:44 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:31:32 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,12 @@ int init_thread(t_data *data)
 
 	while(++k < data->philo_num)
 	{
+		printf("porco dioooooo\n");
 		if(pthread_join(data->tid[k], NULL))
 			printf(" dio\n");
+		
 	}
+
 	return (0);
 }
 

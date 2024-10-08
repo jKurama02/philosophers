@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 14:14:00 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/07 14:56:57 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:47:59 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ void printa_cose(t_philo *philo, char *str)
 	pthread_mutex_lock(&philo->data->write);
 	if(philo->data->dead == 1)
 	{
+		pthread_mutex_destroy(philo->l_fork);
+		pthread_mutex_destroy(philo->r_fork);
+		//pthread_mutex_destroy(&philo->lock);
 		pthread_mutex_unlock(&philo->data->write);
-		exit;
 	}
 	printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, str);
 	pthread_mutex_unlock(&philo->data->write);
