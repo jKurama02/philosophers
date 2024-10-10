@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:01 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/08 19:31:32 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/10 16:52:47 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,18 @@ int init_thread(t_data *data)
 	k = -1;
 	i = -1;
 	data->start_time = ft_time();
-	//if(data->meals_number > 0)
-	//{
-	//	if(pthread_create(&data->philos[0].m, NULL, &miller, &data->philos[0]))
-	//		printf("dio\n");
-	//}
 	while(++i < data->philo_num)
 	{
-		//if((data->philos[i].id % 2) == 1)
-		//	my_usleep(1);
 		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
-			printf("dio\n");
+			printf("error\n");
 		my_usleep(1);
 	}
 
 	while(++k < data->philo_num)
 	{
-		printf("porco dioooooo\n");
 		if(pthread_join(data->tid[k], NULL))
-			printf(" dio\n");
-		
+			printf("error\n");
 	}
-
 	return (0);
 }
 
@@ -73,12 +63,12 @@ int init_input2(t_data *data)
 	data->philos = malloc(sizeof(t_philo) * data->philo_num);
 	while(++i < data->philo_num)
 		pthread_mutex_init(&data->forks[i], NULL);
-	data->philos[0].r_fork = &data->forks[data->philo_num - 1]; // se ho 4 filosofi , le forchetta saranno 4 ma partono da [0],[1],[2],[3]
+	data->philos[0].r_fork = &data->forks[data->philo_num - 1];
 	data->philos[0].l_fork = &data->forks[0];
 	i = 0;
 	while(++i < data->philo_num)
 	{
-		data->philos[i].r_fork = &data->forks[i - 1]; // co dio
+		data->philos[i].r_fork = &data->forks[i - 1];
 		data->philos[i].l_fork = &data->forks[i];
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/08 19:45:20 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/10 16:53:29 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void *routine(void *philos)
 	philo = (t_philo *)philos;
 
 	if(pthread_create(&philo->s, NULL, &miller, (void *)philo))
-			printf("poverodio\n");
+			printf("error\n");
 	if(philo->data->argument == 6)
 	{
 		while((philo->eat_cont <= philo->data->meals_number) && (philo->data->dead == 0))
@@ -78,22 +78,28 @@ int main(int argc, char **argv)
 			err_exit("Error philo <3");
 		if(init_thread(&data))
 			err_exit("Error init_thread <3");
-		at_home(&data);
+		all_at_home(&data);
 		return (0);
 	}
 }
 
-int at_come(t_data *data)
+int all_at_home(t_data *data)
 {
-	while(
-		
-	)
+	int i;
+
+	i = 0;
+	while(i < data->philo_num)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philos[i].lock);
+		i++;
+	}
+	pthread_mutex_destroy(&data->write);
+	pthread_mutex_destroy(&data->lock);
+	if (data->tid)
+		free(data->tid);
+	if (data->forks)
+		free(data->forks);
+	if (data->philos)
+		free(data->philos);
 }
-/*
-	sistemare :
-
-		input 1 filosofo = morte diretta;
-		se mangiano quanto devono , finire il programma senza farli morire
-
-
-*/
