@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/10 16:53:29 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/12 15:59:22 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void *miller(void *philos)
 	}
 	pthread_mutex_lock(&philo->data->write);
 	printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, "died");
+	pthread_mutex_unlock(&philo->data->write);
 }
 
 
@@ -57,6 +58,7 @@ void *routine(void *philos)
 		}
 	}
 	pthread_join(philo->s, NULL);
+	return((void*) 0);
 }
 
 int main(int argc, char **argv)
@@ -67,7 +69,6 @@ int main(int argc, char **argv)
 		data.argument = 6;
 	if(argc == 5)
 		data.argument = 5;
-
 	if(argc == 5 || argc == 6)
 	{
 		if(check_input(argv))
@@ -102,4 +103,5 @@ int all_at_home(t_data *data)
 		free(data->forks);
 	if (data->philos)
 		free(data->philos);
+	return (0);
 }
