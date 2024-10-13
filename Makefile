@@ -6,7 +6,7 @@
 #    By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/09 19:04:31 by anmedyns          #+#    #+#              #
-#    Updated: 2024/10/04 14:24:26 by anmedyns         ###   ########.fr        #
+#    Updated: 2024/10/13 20:19:22 by anmedyns         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ fclean: 	clean
 
 re:			fclean all
 
-git:
+caca:
 	git add .
 	git commit -m "update"
 	git push
