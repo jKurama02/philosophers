@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/10 16:53:44 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/13 21:34:58 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void		*think(void *singlephilo);
 void		printa_cose(t_philo *philo, char *str);
 void		*miller(void *philos);
 int			all_at_home(t_data *data);
+int			one_philo (t_data *data);
 
 #endif
 

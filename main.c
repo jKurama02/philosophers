@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/13 20:06:49 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/13 21:36:50 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int main(int argc, char **argv)
 			err_exit("Error init 1/ 2 <3");
 		if (init_philo(&data))
 			err_exit("Error philo <3");
+		if (data.philo_num == 1)
+			one_philo(&data);
 		if(init_thread(&data))
 			err_exit("Error init_thread <3");
 		all_at_home(&data);
@@ -112,4 +114,14 @@ int all_at_home(t_data *data)
 	if (data->philos)
 		free(data->philos);
 	return (0);
+}
+
+int one_philo (t_data *data)
+{
+	data->start_time = ft_time();
+	pthread_create(&data->tid[0], NULL, &routine, &data->philos[0]);
+	pthread_detach(data->tid[0]);
+	while (data->dead == 0)
+		my_usleep(0);
+	return 0;
 }
