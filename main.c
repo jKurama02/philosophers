@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/12 19:16:34 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/13 19:57:46 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,26 @@ void *miller(void *philos)
 {
 	t_philo *philo;
 	philo = philos;
+	int i = -1;
 
 	while(philo->data->dead != 1)
 	{
 		if((ft_time() > philo->time_to_die) && philo-> eating != 1)
 		{
 			pthread_mutex_lock(&philo->data->lock);
-			philo->data->dead = 1;
-			pthread_mutex_unlock(&philo->data->lock);
-			break;
+			philo->data->dead++;
 		}
 	}
-	pthread_mutex_lock(&philo->data->write);
-	printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, "died");
-	pthread_mutex_unlock(&philo->data->write);
+	if(philo->data->dead == 1)
+	{
+		philo->data->dead = 2;
+		pthread_mutex_unlock(&philo->data->lock);
+		pthread_mutex_lock(&philo->data->write);
+		printf("%ld %i %s\n", (ft_time() - philo->data->start_time), philo->id, "died");
+		my_usleep(500);
+		pthread_mutex_unlock(&philo->data->write);
+	}
+	pthread_exit(NULL);
 }
 
 
@@ -43,19 +49,21 @@ void *routine(void *philos)
 			printf("error\n");
 	if(philo->data->argument == 6)
 	{
-		while((philo->eat_cont <= philo->data->meals_number) && (philo->data->dead == 0))
+		while(philo->eat_cont <= (philo->data->meals_number - 1))
 		{
 			think(philo);
 			take_fork(philo);
 		}
+		pthread_detach(philo->s);
 	}
-	else if(philo->data->argument == 5)
+	if(philo->data->argument == 5)
 	{
 		while (philo->data->dead == 0)
 		{
 			think(philo);
 			take_fork(philo);
 		}
+		pthread_detach(philo->s);
 	}
 	pthread_join(philo->s, NULL);
 	return((void*) 0);
