@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/13 19:57:46 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/13 20:06:49 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void *miller(void *philos)
 		my_usleep(500);
 		pthread_mutex_unlock(&philo->data->write);
 	}
-	pthread_exit(NULL);
+	return((void *) 0);
 }
 
 

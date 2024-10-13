@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:01 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/12 15:52:37 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/13 20:17:36 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int init_thread(t_data *data)
 	{
 		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			printf("error\n");
+		my_usleep(1);
 	}
 	while(++k < data->philo_num)
 	{
