@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:05:24 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/04 14:18:54 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/15 14:38:42 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_atoi(char *str)
 	return (res * sign);
 }
 
-void err_exit(char *err)
+void	err_exit(char *err)
 {
 	printf("%s\n", err);
 	exit(EXIT_FAILURE);
@@ -49,12 +49,12 @@ int	check_input(char **argv)
 	int	k;
 
 	i = 0;
-	while(argv[++i])
+	while (argv[++i])
 	{
 		k = 0;
-		while(argv[i][k])
+		while (argv[i][k])
 		{
-			if(argv[i][k] == ' ' || argv[i][k] == '+')
+			if (argv[i][k] == ' ' || argv[i][k] == '+')
 				k++;
 			else if (!(argv[i][k] >= 48 && argv[i][k] <= 57))
 				return (1);
@@ -67,9 +67,9 @@ int	check_input(char **argv)
 int	my_usleep(useconds_t time)
 {
 	u_int64_t	start;
+
 	start = ft_time();
 	while ((ft_time() - start) < time)
 		usleep(time / 10);
-	return(0);
+	return (0);
 }
-

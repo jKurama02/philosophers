@@ -6,34 +6,34 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:02:01 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/13 20:17:36 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/15 14:42:20 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-int init_thread(t_data *data)
+int	init_thread(t_data *data)
 {
-	int i;
-	int k;
+	int	i;
+	int	k;
 
 	k = -1;
 	i = -1;
 	data->start_time = ft_time();
-	while(++i < data->philo_num)
+	while (++i < data->philo_num)
 	{
-		if(pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
+		if (pthread_create(&data->tid[i], NULL, &routine, &data->philos[i]))
 			printf("error\n");
 		my_usleep(1);
 	}
-	while(++k < data->philo_num)
+	while (++k < data->philo_num)
 	{
 		pthread_join(data->tid[k], NULL);
 	}
 	return (0);
 }
 
-int init_input1(t_data *data, int argc, char **argv)
+int	init_input1(t_data *data, int argc, char **argv)
 {
 	pthread_mutex_init(&data->write, NULL);
 	pthread_mutex_init(&data->lock, NULL);
@@ -41,9 +41,9 @@ int init_input1(t_data *data, int argc, char **argv)
 	data->death_time = (uint64_t) ft_atoi(argv[2]);
 	data->eat_time = (uint64_t) ft_atoi(argv[3]);
 	data->sleep_time = (uint64_t) ft_atoi(argv[4]);
-	if(argc == 6)
+	if (argc == 6)
 		data->meals_number = ft_atoi(argv[5]);
-	if(data->philo_num <= 0 || data->death_time < 0
+	if (data->philo_num <= 0 || data->death_time < 0
 		|| data->eat_time < 0 || data->sleep_time < 0
 		|| data->philo_num > 200 || data->meals_number >= 200)
 		return (1);
@@ -51,39 +51,42 @@ int init_input1(t_data *data, int argc, char **argv)
 	data->dead = 0;
 	return (0);
 }
-int init_input2(t_data *data)
+
+int	init_input2(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	data->tid = malloc(sizeof(pthread_t) * data->philo_num);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_num);
 	data->philos = malloc(sizeof(t_philo) * data->philo_num);
-	while(++i < data->philo_num)
+	while (++i < data->philo_num)
 		pthread_mutex_init(&data->forks[i], NULL);
 	data->philos[0].r_fork = &data->forks[data->philo_num - 1];
 	data->philos[0].l_fork = &data->forks[0];
 	i = 0;
-	while(++i < data->philo_num)
+	while (++i < data->philo_num)
 	{
 		data->philos[i].r_fork = &data->forks[i - 1];
 		data->philos[i].l_fork = &data->forks[i];
 	}
 	return (0);
 }
-uint64_t ft_time(void)
+
+uint64_t	ft_time(void)
 {
-	struct timeval time;
+	struct timeval	time;
+
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-int init_philo(t_data *data)
+int	init_philo(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(++i < data->philo_num)
+	while (++i < data->philo_num)
 	{
 		data->philos[i].id = i + 1;
 		data->philos[i].data = data;
@@ -94,5 +97,5 @@ int init_philo(t_data *data)
 		data->philos[i].time_to_die = ft_time() + data->death_time;
 		pthread_mutex_init(&data->philos[i].lock, NULL);
 	}
-	return 0;
+	return (0);
 }
