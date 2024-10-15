@@ -6,12 +6,12 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:07:45 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/15 14:34:41 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/15 18:17:55 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILOSOPHER_H
+# define PHILOSOPHER_H
 
 # include <unistd.h>
 # include <stdlib.h>
