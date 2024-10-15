@@ -16,7 +16,7 @@ void	*miller(void *philos)
 {
 	t_philo	*philo;
 	int		i;
-dassadsad;
+
 	philo = philos;
 	i = -1;
 	while (philo->data->dead != 1)
