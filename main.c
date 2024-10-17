@@ -6,7 +6,7 @@
 /*   By: anmedyns <anmedyns@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 19:04:51 by anmedyns          #+#    #+#             */
-/*   Updated: 2024/10/15 14:50:54 by anmedyns         ###   ########.fr       */
+/*   Updated: 2024/10/17 22:51:30 by anmedyns         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	if (argc != 5 && argc != 6)
+		err_exit("Error argument number");
 	if (argc == 6)
 		data.argument = 6;
 	if (argc == 5)
